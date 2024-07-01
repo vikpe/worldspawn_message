@@ -20,20 +20,25 @@ impl From<&str> for Message {
 fn to_lines(message: &str) -> Vec<String> {
     let lines: Vec<String> = message
         .split('\n')
-        .map(|line| strip_unicode(line).trim().to_string())
+        .map(|line| strip(line).trim().to_string())
         .filter(|line| !line.is_empty())
         .collect();
     lines
 }
 
-fn strip_unicode(value: &str) -> String {
-    value
+fn strip(value: &str) -> String {
+    let result: String = value
         .chars()
         .map(|c| match c.is_ascii_control() {
             true => ' ',
             false => c,
         })
-        .collect()
+        .collect();
+    result
+        .replace("   ", " ")
+        .replace("  ", " ")
+        .trim()
+        .to_string()
 }
 
 fn is_delimiter(c: char) -> bool {
@@ -80,9 +85,10 @@ mod tests {
     }
 
     #[test]
-    fn test_strip_unicode() {
-        assert_eq!(strip_unicode("the foo bar"), "the foo bar".to_string());
-        assert_eq!(strip_unicode("thefoobar"), " the foo bar ".to_string());
+    fn test_strip() {
+        assert_eq!(strip("the foo bar"), "the foo bar".to_string());
+        assert_eq!(strip(" the   foo  bar  "), "the foo bar".to_string());
+        assert_eq!(strip("thefoobar"), "the foo bar".to_string());
     }
 
     #[test]
