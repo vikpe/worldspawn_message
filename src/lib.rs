@@ -37,11 +37,11 @@ fn strip_unicode(value: &str) -> String {
 }
 
 fn is_delimiter(c: char) -> bool {
-    c == '(' || c == '[' || c == '-'
+    c == '(' || c == '[' || c == ','
 }
 
 fn get_author(line: &str) -> Option<String> {
-    let segment = match line.find(is_delimiter) {
+    let segment = match line.rfind(is_delimiter) {
         Some(pos) => line[..pos].trim(),
         None => line,
     };
@@ -94,6 +94,8 @@ mod tests {
             ("Foo", None),
             ("Foo BY Bar", Some("Bar".to_string())),
             ("Foo by Bar", Some("Bar".to_string())),
+            ("Foo - by Bar", Some("Bar".to_string())),
+            ("Foo by Bar, dmm4 edition", Some("Bar".to_string())),
             ("by Bar", Some("Bar".to_string())),
             ("Foo BY Bar (1996)", Some("Bar".to_string())),
             ("Foo BY Bar [1996]", Some("Bar".to_string())),
