@@ -37,27 +37,24 @@ fn strip_unicode(value: &str) -> String {
 }
 
 fn is_delimiter(c: char) -> bool {
-    c == '(' || c == '[' || c == ','
+    c == '(' || c == '[' || c == ',' || c == '-'
 }
 
 fn get_author(line: &str) -> Option<String> {
-    let segment = match line.rfind(is_delimiter) {
-        Some(pos) => line[..pos].trim(),
-        None => line,
-    };
+    let line_ = format!(" {}", line);
+    let haystack = line_.to_lowercase();
+    let index_from = haystack.rfind(" by ").map(|i| i + 4)?;
+    let index_to = haystack[index_from..]
+        .find(is_delimiter)
+        .map(|i| index_from + i)
+        .unwrap_or(line_.len());
 
-    if segment.to_lowercase().starts_with("by ") {
-        Some(line[3..].to_string())
-    } else {
-        segment
-            .to_lowercase()
-            .find(" by ")
-            .map(|index| segment[index + 4..].to_string())
-    }
+    let author = &line_[index_from..index_to].trim();
+    Some(author.to_string())
 }
 
 fn get_release_year(line: &str) -> Option<String> {
-    for year in 1996..2030 {
+    for year in 1996..=2025 {
         if line.contains(&year.to_string()) {
             return Some(year.to_string());
         }
@@ -95,7 +92,9 @@ mod tests {
             ("Foo BY Bar", Some("Bar".to_string())),
             ("Foo by Bar", Some("Bar".to_string())),
             ("Foo - by Bar", Some("Bar".to_string())),
+            ("Foo (abc) - by Bar", Some("Bar".to_string())),
             ("Foo by Bar, dmm4 edition", Some("Bar".to_string())),
+            ("Foo by Bar - dmm4 edition", Some("Bar".to_string())),
             ("by Bar", Some("Bar".to_string())),
             ("Foo BY Bar (1996)", Some("Bar".to_string())),
             ("Foo BY Bar [1996]", Some("Bar".to_string())),
