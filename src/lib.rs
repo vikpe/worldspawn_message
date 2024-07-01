@@ -1,8 +1,8 @@
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Message {
-    lines: Vec<String>,
-    authors: Vec<String>,
-    release_year: Option<String>,
+    pub lines: Vec<String>,
+    pub authors: Vec<String>,
+    pub release_year: Option<String>,
 }
 
 impl From<&str> for Message {
