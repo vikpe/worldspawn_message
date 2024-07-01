@@ -42,7 +42,7 @@ fn strip(value: &str) -> String {
 }
 
 fn is_delimiter(c: char) -> bool {
-    c == '(' || c == '[' || c == ',' || c == '-'
+    c == '(' || c == ')' || c == '[' || c == ']' || c == ',' || c == '-'
 }
 
 fn get_author(line: &str) -> Option<String> {
@@ -104,6 +104,8 @@ mod tests {
             ("by Bar", Some("Bar".to_string())),
             ("Foo BY Bar (1996)", Some("Bar".to_string())),
             ("Foo BY Bar [1996]", Some("Bar".to_string())),
+            ("Foo (2020 remix by Bar)", Some("Bar".to_string())),
+            ("Foo [2020 remix by Bar]", Some("Bar".to_string())),
         ]);
 
         for (line, expected) in test_cases {
