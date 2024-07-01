@@ -75,7 +75,16 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_to_lines() {
+        assert_eq!(
+            to_lines("thefoobar\n\n by Bar\n"),
+            vec!["the foo bar".to_string(), "by Bar".to_string(),]
+        )
+    }
+
+    #[test]
     fn test_strip_unicode() {
+        assert_eq!(strip_unicode("the foo bar"), "the foo bar".to_string());
         assert_eq!(strip_unicode("thefoobar"), " the foo bar ".to_string());
     }
 
