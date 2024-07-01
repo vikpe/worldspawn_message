@@ -1,0 +1,20 @@
+[package]
+name = "worldspawn_message"
+description = "Parse Quake map worldspawn messages"
+categories = ["parsing"]
+keywords = ["bsp", "parser", "quake", "quakeworld"]
+repository = "https://github.com/vikpe/worldspawn_message"
+authors = ["Viktor Persson"]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+include = [
+    "/Cargo.toml",
+    "/README.md",
+    "/src/**",
+]
+[dependencies]
+anyhow = "1.0.86"
+
+[dev-dependencies]
+pretty_assertions = "1.4.0"
